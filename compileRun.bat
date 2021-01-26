@@ -1,0 +1,1 @@
+go build -o million-video-builder.exe && .\million-video-builder.exe clips output
