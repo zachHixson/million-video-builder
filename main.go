@@ -126,7 +126,7 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 				clipPath = string(pathArr[curDigit])
 			}
 
-			argClips += "-i " + clipPath + " "
+			argClips += "-i \"" + clipPath + "\" "
 			argFilter += "[" + climpNum + ":v][" + climpNum + ":a] "
 		}
 
@@ -136,7 +136,7 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 			argStr := "ffmpeg " + argClips
 			argStr += "-filter_complex \"" + argFilter
 			argStr += "concat=n=" + strconv.Itoa(chunkLen)
-			argStr += ":v=1:a=1 [v] [a]\" -map \"[v]\" -map \"[a]\"" + outDir + "temp.mp4"
+			argStr += ":v=1:a=1 [v] [a]\" -map \"[v]\" -map \"[a]\" \"" + outDir + "temp.mp4\""
 			pws := exec.Command("powershell", "/c", argStr)
 
 			if (len(os.Args) >= 4 && os.Args[3] == "-debug"){
