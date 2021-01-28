@@ -14,6 +14,8 @@ This program is used to generate a video sequence of the digits 1-1,000,000 base
 1. Place `million-video-builder.exe` into the root project directory
 1. With the command line pointed to the project directory, run `.\million-video-builder.exe [src_folder\path] [path\to\output_folder]` (without [ ] braces)
 
+Optionally you can add a `-debug` flag at the end of the above command to display FFmpeg debug output
+
 ## Pausing, Resuming and Restarting
 
 If you want to pause the render, you can do so easily by exiting the command prompt window. The render will resume where it left off next time the program is run (as long as the output directory is the same)
