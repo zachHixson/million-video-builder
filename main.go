@@ -30,7 +30,7 @@ func scanClipDir() ([]int, []string){
 
 	fmt.Println("Scanning clip directory")
 
-	clipDir := os.Args[1]//getAbsolutePath(os.Args[1])
+	clipDir := os.Args[1]
 
 	if _, err := os.Stat(clipDir); os.IsNotExist(err) {
 		fmt.Println("ERROR: The source clip directory that was provided does not exists. Please check and try again")
@@ -138,8 +138,12 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 			argStr += "concat=n=" + strconv.Itoa(chunkLen)
 			argStr += ":v=1:a=1 [v] [a]\" -map \"[v]\" -map \"[a]\"" + outDir + "temp.mp4"
 			pws := exec.Command("powershell", "/c", argStr)
-			//pws.Stdout = os.Stdout
-			//pws.Stderr = os.Stderr
+
+			if (len(os.Args) >= 4 && os.Args[3] == "-debug"){
+				pws.Stdout = os.Stdout
+				pws.Stderr = os.Stderr
+			}
+
 			err := pws.Run()
 
 			if err != nil {
@@ -149,8 +153,6 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 				os.Rename(outDir + "temp.mp4", outDir + outFileName + ".mp4")
 			}
 		}
-
-		fmt.Println(i)
 	}
 }
 
