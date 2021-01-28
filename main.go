@@ -30,7 +30,7 @@ func scanClipDir() ([]int, []string){
 
 	fmt.Println("Scanning clip directory")
 
-	clipDir := getAbsolutePath(os.Args[1])
+	clipDir := os.Args[1]//getAbsolutePath(os.Args[1])
 
 	if _, err := os.Stat(clipDir); os.IsNotExist(err) {
 		fmt.Println("ERROR: The source clip directory that was provided does not exists. Please check and try again")
