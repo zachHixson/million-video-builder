@@ -12,7 +12,7 @@ This program is used to generate a video sequence of the digits 1-1,000,000 base
 ## How to run
 
 1. Place `million-video-builder.exe` into the root project directory
-1. With the command line pointed to the project directory, run `.\million-video-builder.exe [src_folder\path] [path\to\output_folder]` (without [ ] braces)
+1. With the command line pointed to the project directory, run `.\million-video-builder.exe [src_folder\path] [path\to\output_folder] [start number] [end number]` (without [ ] braces)
 
 Optionally you can add a `-debug` flag at the end of the above command to display FFmpeg debug output
 

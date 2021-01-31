@@ -11,6 +11,11 @@ import (
 )
 
 func main(){
+	if len(os.Args) < 5 {
+		fmt.Println("ERROR: Missing arguments. Required Arguments: SRC OUT START END")
+		os.Exit(1)
+	}
+
 	clipSizes, clipPaths := scanClipDir()
 	generateAllChunks(clipSizes, clipPaths)
 	fmt.Println("Finished")
@@ -69,7 +74,7 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 	fmt.Println("Building chunks")
 
 	const CHUNKSIZE = 1300000000
-	digitLen := 1000000
+	digitLen, argErr := strconv.Atoi(os.Args[4])
 	outDir := getAbsolutePath(os.Args[2]) + "\\"
 	i := getResumeDigit()
 
@@ -80,6 +85,10 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 	if _, err := os.Stat(outDir + "temp.mp4"); !os.IsNotExist(err) {
 		fmt.Println("Clearing previous temp file")
 		_ = os.Remove(outDir + "temp.mp4")
+	}
+
+	if argErr != nil {
+		fmt.Println("ERROR: End number cannot be converted to numeric value")
 	}
 
 	for i <= digitLen {
@@ -139,7 +148,7 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 			argStr += ":v=1:a=1 [v] [a]\" -map \"[v]\" -map \"[a]\" \"" + outDir + "temp.mp4\""
 			pws := exec.Command("powershell", "/c", argStr)
 
-			if (len(os.Args) >= 4 && os.Args[3] == "-debug"){
+			if (len(os.Args) >= 6 && os.Args[5] == "-debug"){
 				pws.Stdout = os.Stdout
 				pws.Stderr = os.Stderr
 			}
@@ -159,10 +168,12 @@ func generateAllChunks(sizeArr []int, pathArr []string){
 func getResumeDigit() int{
 	largestNum := 0
 	outPath := getAbsolutePath(os.Args[2])
+	startArg, argErr := strconv.Atoi(os.Args[3])
+
+	check(argErr)
 
 	if _, err := os.Stat(outPath); os.IsNotExist(err) {
-		fmt.Println("No existing clips found, starting at digit 0")
-		return 0
+		fmt.Println("No existing clips found, starting at digit " + strconv.Itoa(startArg))
 	}
 
 	clipPathErr := filepath.Walk(outPath, func(path string, info os.FileInfo, err error) error {
@@ -183,11 +194,18 @@ func getResumeDigit() int{
 
 	check(clipPathErr)
 
-	return largestNum
+	return max(largestNum, startArg)
 }
 
 func check(e error){
 	if (e != nil) {
 		panic(e)
 	}
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
